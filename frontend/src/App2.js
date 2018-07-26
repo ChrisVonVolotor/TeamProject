@@ -6,7 +6,7 @@ import './App.css';
 import NavBar from './NavBar2.js';
 import Lesson from './Lesson.js';
 import Question from './Question.js';
-//import HighScores from './HighScores.js';
+import HighScores from './HighScores.js';
 
 var createReactClass = require('create-react-class');
 var App = createReactClass({
@@ -17,11 +17,14 @@ var App = createReactClass({
             showLesson: false,
             showQuestion: false,
             showHighScores: false,
+            getUserDetails: false,
             lessonList: [],
             questionsList: [],
             answersList: [],
             difficulty: null,
             index: 0,
+            score: 0,
+            userScores: []
         }
     },
 
@@ -70,12 +73,22 @@ var App = createReactClass({
         })
     },
 
-    next: function(){
-        this.setState({
-            index: this.state.index+1,
-            showLesson: true,
-            showQuestion: false
-        })
+    next: function(score){
+        if(this.state.index+1<this.state.questionsList.length){
+            this.setState({
+                index: this.state.index+1,
+                showLesson: true,
+                showQuestion: false
+            })
+        } else {
+            this.setState({
+                getUserDetails: true,
+                showLesson: false,
+                showQuestion: false,
+                score: score
+            })
+        }
+
     },
 
     getLessons: function(newState){
@@ -163,6 +176,24 @@ var App = createReactClass({
         }
     },
 
+    getdatname: function(){
+        document.getElementById('text').style.visibility='hidden';
+        document.getElementById('first').innerHTML='HUH ' + document.getElementById('text').value +' eh? nice sounding name ya punter';
+        document.getElementById('second').innerHTML= 'hey, ya want me to add ya to de list? all the cool people are on its.';
+        var dataToBeSent = {
+            "userName": document.getElementById('text').value,
+            "score": this.state.score
+        }
+
+        this.state.userScores.push(dataToBeSent);
+        this.setState({
+            showHighScores: true,
+            showQuestion: false,
+            showLesson: false,
+            getUserDetails: false
+        })
+    },
+
     renderAboutUs: function(){
         return (
             <div>
@@ -195,14 +226,29 @@ var App = createReactClass({
 
     },
 
-    // renderHighScores: function(){
-    //     return(
-    //         <div>
-    //             <NavBar parentMethod={this.handleState}/>
-    //             <HighScores/>
-    //         </div>
-    //     )
-    // },
+    renderGetUserDetails: function(){
+        return(
+            <div>
+                <NavBar parentMethod={this.handleState}/>
+                <div className="container">
+                    <form>
+                        <div id='first'> HEY UP KIDDO, WHAT'S YA NAME? </div>
+                        <div id='second'>  I'LL MAKE YOU A WINNA! </div>
+                        <input id='text' className="text"/>
+                        <button id='datdearbutton' onClick={this.getdatname}>YA DAT'S MA NAME, MATE!</button>
+                    </form>
+                </div>
+            </div>
+        )
+    },
+    renderHighScores: function(){
+        return(
+            <div>
+                <NavBar parentMethod={this.handleState}/>
+                <HighScores userScores={this.state.userScores}/>
+            </div>
+        )
+    },
 
     render: function(){
         if(this.state.showAboutUs){
@@ -214,9 +260,12 @@ var App = createReactClass({
         else if(this.state.showQuestion){
             return this.renderQuestion();
         }
-        // else if(this.state.showHighScores){
-        //     return this.renderHighScores();
-        // }
+        else if(this.state.getUserDetails){
+            return this.renderGetUserDetails();
+        }
+        else if(this.state.showHighScores){
+            return this.renderHighScores();
+        }
     }
 });
 export default App;

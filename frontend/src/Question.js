@@ -17,7 +17,7 @@ var Question = createReactClass({
     },
 
     handleClick: function(){
-        this.props.parentMethod();
+        this.props.parentMethod(this.state.score);
     },
 
     isCorrect: function(){
@@ -34,11 +34,17 @@ var Question = createReactClass({
                 }
             }
         }
-        if(isCorrect){
+        if(isCorrect && this.state.attempts<10){
             this.setState({
                 correct: true,
                 isAnswered: true,
                 score: (this.state.score+10)-this.state.attempts
+            })
+        } else if(isCorrect){
+            this.setState({
+                correct: true,
+                isAnswered: true,
+                score: 1
             })
         }
     },
@@ -60,7 +66,6 @@ var Question = createReactClass({
     },
 
     drop: function(event) {
-        console.log("test");
     event.preventDefault();
     if( "place" == event.target.className) {
         var data = event.dataTransfer.getData("text");
@@ -139,12 +144,13 @@ var Question = createReactClass({
             <div className="container">
                 <div>Number of attempts: {this.state.attempts}</div>
                 <div>Your score: {this.state.score}</div>
-                <div id="drag1" draggable="true" onDragStart={this.drag} className="drag" dangerouslySetInnerHTML={this.setAnswers(0)}></div>
-                <div id="drag2" draggable="true" onDragStart={this.drag} className="drag" dangerouslySetInnerHTML={this.setAnswers(1)}></div>
-                <div id="drag3" draggable="true" onDragStart={this.drag} className="drag" dangerouslySetInnerHTML={this.setAnswers(2)}></div>
 
+                {this.props.questionsList[this.props.index].solution.map((item,i) => {
+                    var idName = "drag";
+                    return <div key={i} id={idName+(i+1)} draggable="true" onDragStart={this.drag} className="drag">{ReactHtmlParser(item.answerCodeSnippet)}</div>
+                })
+                }
                 <br></br>
-
                 {this.props.questionsList[this.props.index].levelCode.question.map((item,i) => {
                     var idName = "place";
                     if (i < this.props.questionsList[this.props.index].levelCode.question.length - 1) {
