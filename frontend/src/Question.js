@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Draggable from 'react-draggable';
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 import Button from "./Button";
+import Timer from './Timer.js';
 
 var createReactClass = require('create-react-class');
 var Question = createReactClass({
@@ -79,15 +80,18 @@ var Question = createReactClass({
     renderQuestion: function(){
         const html = this.props.questionsList[this.props.index].levelCode
         return (
-            <div className="container">
+            <div>
                 <div>Number of attempts: {this.state.attempts}</div>
                 <div>Your score: {this.state.score}</div>
 
-                {this.props.questionsList[this.props.index].solution.map((item,i) => {
-                    var idName = "drag";
-                    return <div key={i} id={idName+(i+1)} draggable="true" onDragStart={this.drag} className="drag">{ReactHtmlParser(item.answerCodeSnippet)}</div>
-                })
-                }
+                <div style={{align: "left"}}>
+                    {this.props.questionsList[this.props.index].solution.map((item,i) => {
+                        var idName = "drag";
+                        return <span className="dragItem" key={i} id={idName+(i+1)} draggable="true" onDragStart={this.drag}>{ReactHtmlParser(item.answerCodeSnippet)}</span>
+                    })
+                    }
+                </div>
+
                 <br></br>
                     {/*<Draggable><div>{this.props.questionsList[this.props.index].answer1}</div></Draggable><br></br>*/}
                     {/*<Draggable><div>{this.props.questionsList[this.props.index].answer2}</div></Draggable><br></br>*/}
@@ -95,53 +99,36 @@ var Question = createReactClass({
                     {/*<Draggable><div>{this.props.questionsList[this.props.index].answer4}</div></Draggable><br></br>*/}
                     {/*<div dangerouslySetInnerHTML={this.setQuestion()}></div>*/}
 
-
-                {this.props.questionsList[this.props.index].levelCode.question.map((item,i) => {
-                    var idName = "place";
-                    if (i < this.props.questionsList[this.props.index].levelCode.question.length - 1) {
-                        return <span key={i}>{ReactHtmlParser(item)}
-                            <span id={idName+(i+1)} className="place" onDrop={this.drop} onDragOver={this.allowDrop} style={{border: "solid"}}>&emsp;</span></span>
-                    } else {
-                        return <span key={i}>
+                <div style={{align: "center"}}>
+                    {this.props.questionsList[this.props.index].levelCode.question.map((item,i) => {
+                        var idName = "place";
+                        if (i < this.props.questionsList[this.props.index].levelCode.question.length - 1) {
+                            return <span key={i}>{ReactHtmlParser(item)}
+                                <span id={idName+(i+1)} className="place" onDrop={this.drop} onDragOver={this.allowDrop} style={{border: "solid"}}>&emsp;</span></span>
+                        } else {
+                            return <span key={i}>
                             {ReactHtmlParser(item)}
                         </span>
+                        }
+                    })
                     }
-                })
-                }
+                </div>
+
 
 
 
                 <br></br>
-                    <button type="button" onClick={this.isCorrect} className="btn btn-success">Check</button>
-                    <button type="button" onClick={this.handleButtonClick} className="btn btn-success">Show Answer</button>
+                    <button type="button" onClick={this.isCorrect} className="btn btn-success">Submit</button>
+                    <button type="button" onClick={this.handleButtonClick} className="btn btn-success">Hint</button>
+                <Timer ref={this.child}/>
             </div>
         )
     },
 
-    renderResult: function(){
-        if(this.state.correct){
-            return (
-                <div>
-                    <h1>Unlucky, try again</h1>
-                    {this.props.questionsList[this.props.index]}
-                    <button type="button" onClick={this.compareAnswer} className="btn btn-success">Check</button>
-                    <button type="button" onClick={this.handleButtonClick} className="btn btn-success">Show Answer</button>
-                </div>
-            )
-        } else if(!this.state.correct){
-            return (
-                <div>
-                    <h1>You got it right</h1>
-                    {this.props.questionsList[this.props.index]}
-                    <button type="button" onClick={this.handleButtonClick} className="btn btn-success">Next</button>
-                </div>
-            )
-        }
-    },
 
     renderCorrect: function(){
         return (
-            <div className="container">
+            <div>
                 <div>Number of attempts: {this.state.attempts}</div>
                 <div>Your score: {this.state.score}</div>
 
@@ -168,8 +155,6 @@ var Question = createReactClass({
                 <button type="button" onClick={this.handleClick} className="btn btn-success">Next</button>
 
             </div>
-
-
         )
     },
 

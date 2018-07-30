@@ -36,8 +36,8 @@ var Lesson = createReactClass({
 
     render: function(){
         return (
-            <div className="container">
-                <h1>{this.props.lessonList[this.props.index]}</h1><br></br>
+            <div>
+                <h1>{this.props.lessonList[this.props.index].lesson}</h1><br></br>
                 <button type="button" onClick={this.handleButtonClick} className="btn btn-success">Start Question</button>
             </div>
         )

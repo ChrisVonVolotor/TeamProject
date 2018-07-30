@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import logo from './logo.svg';
-import './App.css';
 
 import NavBar from './NavBar2.js';
 import Lesson from './Lesson.js';
@@ -18,13 +16,15 @@ var App = createReactClass({
             showQuestion: false,
             showHighScores: false,
             getUserDetails: false,
+            addHighScore: false,
             lessonList: [],
             questionsList: [],
             answersList: [],
             difficulty: null,
             index: 0,
             score: 0,
-            userScores: []
+            userScores: [],
+            currUser: ""
         }
     },
 
@@ -39,28 +39,45 @@ var App = createReactClass({
                 showLesson: false,
                 showQuestion: false,
                 showAboutUs: true,
-                difficulty: null
+                addHighScore: false,
+                difficulty: null,
+                score: 0,
+                index: 0
             })
         } else if(newState == "Easy"){
             this.setState({
-                showLesson: true,
+                getUserDetails: true,
+                showLesson: false,
                 showQuestion: false,
                 showAboutUs: false,
                 difficulty: "Easy"
             })
         } else if(newState == "Medium"){
             this.setState({
-                showLesson: true,
+                getUserDetails: true,
+                showLesson: false,
                 showQuestion: false,
                 showAboutUs: false,
                 difficulty: "Medium"
             })
         } else if(newState == "Hard"){
             this.setState({
-                showLesson: true,
+                getUserDetails: true,
+                showLesson: false,
                 showQuestion: false,
                 showAboutUs: false,
                 difficulty: "Hard"
+            })
+        } else if(newState == "HighScores"){
+            this.setState({
+                showLesson: false,
+                showQuestion: false,
+                showAboutUs: false,
+                difficulty: null,
+                addHighScore: false,
+                showHighScores: true,
+                score: 0,
+                index: 0
             })
         }
     },
@@ -78,15 +95,19 @@ var App = createReactClass({
             this.setState({
                 index: this.state.index+1,
                 showLesson: true,
-                showQuestion: false
+                showQuestion: false,
+                score: this.state.score+score
             })
         } else {
+            score= score +this.state.score;
             this.setState({
-                getUserDetails: true,
+                getUserDetails: false,
+                showHighScores: false,
                 showLesson: false,
                 showQuestion: false,
+                addHighScore: true,
                 score: score
-            })
+            });
         }
 
     },
@@ -107,46 +128,104 @@ var App = createReactClass({
         }
     },
 
+    sendPlayer: function(){
+        var dataToBeSent = {
+            "userName": this.state.currUser,
+            "score": this.state.score
+        }
+        this.state.userScores.push(dataToBeSent);
+        // var Player= {"\"playerName\"":this.state.currUser, "\"score\"":this.state.score};
+        // // var JsonPlayer = JSON.parse(Player);
+        // console.log(Player);
+        this.setState({
+            getUserDetails: false,
+            showHighScores: true,
+            showLesson: false,
+            showQuestion: false,
+            addHighScore: false
+        })
+    },
+
     getQuestions: function(newState){
         if(newState == "Easy"){
             this.setState({
                 //questionsList: [{"answer1": "dummy answer 1","answer2": "dummy answer 2", "answer3": "dummy answer 3", "answer4": "dummy answer 4", "correctOrder":"1234"}]
-                questionsList: [{
-                    "id": 1,
-                    "levelDifficulty": 1,
-                    "levelPosition": 1,
-                    "levelNumber": "1A",
-                    "levelName": "Hello World!",
-                    "levelDescription": "Put a child friendly description of level here (Build Hello World)",
-                    "levelCode": {
-                        "question": [
-                            "public class Hello{<br>&emsp;public static void main() {<br>&emsp;&emsp;System.out.println(\"Hello World\")",
-                            "<br>&emsp;}<br>}",
-                            "", //this is the last line ensuring there is a div at the end of the previous line.
-                            ""
+                questionsList: [
+                    {
+                        "id": 1,
+                        "levelDifficulty": 1,
+                        "levelPosition": 1,
+                        "levelNumber": "1A",
+                        "levelName": "Hello World!",
+                        "lesson": "within java all commands should be ended with a certain character.\n this charcter is the semi-colon the ; key. \n the computer sees this key as a end line symbol.",
+                        "levelDescription": "Put a child friendly description of level here (Build Hello World)",
+                        "levelCode": {
+                            "question": [
+                                "public class Hello{<br>&emsp;public static void main() {<br>&emsp;&emsp;System.out.println(\"Hello World\")",
+                                "<br>&emsp;}<br>}",
+                                "", //this is the last line ensuring there is a div at the end of the previous line.
+                                ""
+                            ]
+                        },
+                        "timer": 600,
+                        "chances": 5,
+                        "solution": [{
+                            "answerPosition": "place1",
+                            "answerCodeSnippet": ";",
+                            "id": 5
+                        },{
+                            "answerPosition": "placeD",
+                            "answerCodeSnippet": ".",
+                            "id": 6
+                        },{
+                            "answerPosition": "place2",
+                            "answerCodeSnippet": "hello",
+                            "id": 7
+                        },{
+                            "answerPosition": "place3",
+                            "answerCodeSnippet": "extra answer",
+                            "id": 8
+                        }
                         ]
                     },
-                    "timer": 600,
-                    "chances": 5,
-                    "solution": [{
-                        "answerPosition": "place1",
-                        "answerCodeSnippet": ";",
-                        "id": 5
-                    },{
-                        "answerPosition": "placeD",
-                        "answerCodeSnippet": ".",
-                        "id": 6
-                    },{
-                        "answerPosition": "place2",
-                        "answerCodeSnippet": "hello",
-                        "id": 7
-                    },{
-                        "answerPosition": "place3",
-                        "answerCodeSnippet": "extra answer",
-                        "id": 8
+                    {
+                        "id": 2,
+                        "levelDifficulty": 1,
+                        "levelPosition": 1,
+                        "levelNumber": "1A",
+                        "levelName": "Hello World!",
+                        "levelDescription": "Put a child friendly description of level here (Build Hello World)",
+                        "levelCode": {
+                            "question": [
+                                "public class Hello{<br>&emsp;public static void main() {<br>&emsp;&emsp;System.out.println(\"Hello World\")",
+                                "<br>&emsp;}<br>}",
+                                "", //this is the last line ensuring there is a div at the end of the previous line.
+                                ""
+                            ]
+                        },
+                        "timer": 600,
+                        "chances": 5,
+                        "solution": [{
+                            "answerPosition": "place1",
+                            "answerCodeSnippet": ";",
+                            "id": 5
+                        },{
+                            "answerPosition": "placeD",
+                            "answerCodeSnippet": ".",
+                            "id": 6
+                        },{
+                            "answerPosition": "place2",
+                            "answerCodeSnippet": "hello",
+                            "id": 7
+                        },{
+                            "answerPosition": "place3",
+                            "answerCodeSnippet": "extra answer",
+                            "id": 8
+                        }
+                        ]
                     }
-                    ]
-                }]
+
+                ]
             });
         } else if(newState == "Medium"){
             this.setState({
@@ -176,21 +255,31 @@ var App = createReactClass({
         }
     },
 
-    getdatname: function(){
+    getUserName: function(){
         document.getElementById('text').style.visibility='hidden';
-        document.getElementById('first').innerHTML='HUH ' + document.getElementById('text').value +' eh? nice sounding name ya punter';
-        document.getElementById('second').innerHTML= 'hey, ya want me to add ya to de list? all the cool people are on its.';
-        var dataToBeSent = {
-            "userName": document.getElementById('text').value,
-            "score": this.state.score
-        }
+        document.getElementById('first').innerHTML='HUH ' + document.getElementById('text').value +'? that\'s a nice name';
 
-        this.state.userScores.push(dataToBeSent);
         this.setState({
-            showHighScores: true,
+            currUser: document.getElementById('text').value,
+        })
+
+        this.setState({
+            showHighScores: false,
+            showQuestion: false,
+            showLesson: true,
+            getUserDetails: false
+        })
+    },
+
+    goToAbout: function(){
+        this.setState({
+            showAboutUs: true,
+            showHighScores: false,
             showQuestion: false,
             showLesson: false,
-            getUserDetails: false
+            addHighScore: false,
+            score: 0,
+            index: 0
         })
     },
 
@@ -199,9 +288,10 @@ var App = createReactClass({
             <div>
                 <NavBar parentMethod={this.handleState} />
                 <div className="container">
-                    <h1>About us</h1>
+                    <h1 className="leaf">About us</h1>
                     <p>Our mission is (Insert generic motivational stuff here) "for the youth"</p>
                 </div>
+                <span className="footer"></span>
 
             </div>
         )
@@ -211,7 +301,10 @@ var App = createReactClass({
         return (
             <div>
                 <NavBar parentMethod={this.handleState}/>
-                <Lesson parentMethod={this.lessonFinish} index={this.state.index} lessonList={this.state.lessonList} difficulty={this.state.difficulty}/>
+                <div className="container">
+                    <Lesson parentMethod={this.lessonFinish} index={this.state.index} lessonList={this.state.questionsList} difficulty={this.state.difficulty}/>
+                </div>
+
             </div>
         )
     },
@@ -220,7 +313,10 @@ var App = createReactClass({
         return(
             <div>
                 <NavBar parentMethod={this.handleState}/>
-                <Question parentMethod={this.next} index={this.state.index} questionsList={this.state.questionsList} difficulty={this.state.difficulty}/>
+                <div className="container">
+                    <Question parentMethod={this.next} index={this.state.index} questionsList={this.state.questionsList} difficulty={this.state.difficulty}/>
+                </div>
+
             </div>
         )
 
@@ -232,12 +328,12 @@ var App = createReactClass({
                 <NavBar parentMethod={this.handleState}/>
                 <div className="container">
                     <form>
-                        <div id='first'> HEY UP KIDDO, WHAT'S YA NAME? </div>
-                        <div id='second'>  I'LL MAKE YOU A WINNA! </div>
+                        <div id='first'> Hey there friend, what's your name? </div>
                         <input id='text' className="text"/>
-                        <button id='datdearbutton' onClick={this.getdatname}>YA DAT'S MA NAME, MATE!</button>
+                        <button id='datdearbutton' onClick={this.getUserName}>Yes that's my name.</button>
                     </form>
                 </div>
+
             </div>
         )
     },
@@ -245,7 +341,26 @@ var App = createReactClass({
         return(
             <div>
                 <NavBar parentMethod={this.handleState}/>
-                <HighScores userScores={this.state.userScores}/>
+                <div className="container">
+                    <HighScores userScores={this.state.userScores}/>
+
+                </div>
+
+            </div>
+        )
+    },
+
+    renderAskToAdd: function(){
+        return(
+            <div>
+                <NavBar parentMethod={this.handleState}/>
+                <div className="container">
+                    <h3>Congratulations {this.state.currUser}. Your total score was {this.state.score} </h3>
+                    <h4> Would you like to submit your score?</h4>
+                    <button type="button" onClick={this.goToAbout} className="btn btn-warning">No</button>
+                    <button type="button" onClick={this.sendPlayer} className="btn btn-success">Yes</button>
+
+                </div>
             </div>
         )
     },
@@ -265,6 +380,9 @@ var App = createReactClass({
         }
         else if(this.state.showHighScores){
             return this.renderHighScores();
+        }
+        else if(this.state.addHighScore){
+            return this.renderAskToAdd();
         }
     }
 });

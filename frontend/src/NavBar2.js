@@ -19,22 +19,28 @@ import React, { Component } from 'react';
             this.props.parentMethod("Hard");
         },
 
+        handleClick5: function(){
+            this.props.parentMethod("HighScores");
+        },
+
         render: function(){
             return (
 
+
             <nav className="navbar navbar-default">
-                  <a className="navbar-brand" href="#">Children Of The Future</a>
-                <ul className="nav navbar-nav">
-                  <li onClick={this.handleClick1}><a href="#">About us</a></li>
-                  <li className="dropdown"><a className="dropdown-toggle" data-toggle="dropdown" href="#">Start Playing</a>
-                    <ul className="dropdown-menu">
-                      <li><a href="#" onClick={this.handleClick2}>Easy</a></li>
-                      <li><a href="#" onClick={this.handleClick3}>Medium</a></li>
-                      <li><a href="#" onClick={this.handleClick4}>Hard</a></li>
-                    </ul>
-                  </li>
-                </ul>
-            </nav>
+                   <a className="navbar-brand" href="#">Children Of The Future</a>
+                 <ul className="nav navbar-nav">
+                   <li onClick={this.handleClick1}><a href="#">About us</a></li>
+                   <li className="dropdown"><a className="dropdown-toggle" data-toggle="dropdown" href="#">Start Playing</a>
+                     <ul className="dropdown-menu">
+                       <li><a href="#" onClick={this.handleClick2}>Easy</a></li>
+                       <li><a href="#" onClick={this.handleClick3}>Medium</a></li>
+                       <li><a href="#" onClick={this.handleClick4}>Hard</a></li>
+                     </ul>
+                   </li>
+                     <li onClick={this.handleClick5}><a href="#">HighScores</a></li>
+                 </ul>
+             </nav>
 
             );
         }

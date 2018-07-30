@@ -1,28 +1,106 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+    animation: App-logo-spin infinite 20s linear;
+    height: 80px;
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+    background-color: #222;
+    height: 150px;
+    padding: 20px;
+    color: white;
 }
 
 .App-title {
-  font-size: 1.5em;
+    font-size: 1.5em;
 }
 
 .App-intro {
-  font-size: large;
+    font-size: large;
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/*Where all the text is contained*/
+.container{
+    alignment: center;
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    padding: 10px;
+    box-shadow: 5px 10px darkseagreen;
+    border-radius: 100px 0px;
+    background-color: papayawhip;
+    border: 1px solid papayawhip;
+}
+
+/*The Body with a repeating image*/
+body {
+  width: 100%;
+  height: 100%;
+  background: url(cartoon-background-8430.jpeg);
+  background-repeat: repeat-x;
+  background-color: #60a800;
+  animation: backgroundScroll 400000s linear infinite;
+  background-size: 100%;
+}
+
+@-webkit-keyframes backgroundScroll {
+  from {background-position: 0 0;}
+  to {background-position: -15000000px 0;}
+}
+
+@keyframes backgroundScroll {
+  from {background-position: 0 0;}
+  to {background-position: -15000000px 0;}
+}
+/*The location you want to drop items in*/
+.place{
+    min-width: 40px;
+    border: 1px dashed #218838;
+}
+/*the drag and drop items*/
+.dragItem {
+    padding: 5px;
+    margin: 7px;
+    text-align: center;
+    background-color: paleturquoise;
+    font-size: 12px;
+    border: 1px dashed cornflowerblue;
+}
+
+/*title goes inside the leaf div*/
+.header{
+    margin: 10%;
+    padding-top: 20%;
+}
+
+/*leaf goes in div around the title*/
+.leaf {
+    margin: auto;
+    width: 80%;
+    margin-bottom: 2%;
+    width: 150px; height: 100px;
+    background-color: #A0DE21;
+    -moz-border-radius: 100px 0px;
+    -webkit-border-radius: 100px 0px;
+    border-radius: 100px 0px;
+}
+
+.footer{
+    margin: auto;
+    background-image: url(shrub.png);
+    width: 100%;
+    height: 50%;
+    float: bottom;
+    animation: backgroundScroll2 400000s linear infinite;
+    background-repeat: repeat-x;
+    bottom: 0;
+    position: absolute;
 }
