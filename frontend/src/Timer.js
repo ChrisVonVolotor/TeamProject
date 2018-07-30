@@ -31,9 +31,7 @@ var Timer = createReactClass({
         return (
             <div className='timer'>
                 <h1>{this.state.count}</h1>
-                {this.startTimer.bind(this)}
                 <div>
-                    <button onClick={this.startTimer.bind(this)}>Start</button>
                     <button onClick={this.stopTimer.bind(this)}>Stop</button>
                 </div>
             </div>

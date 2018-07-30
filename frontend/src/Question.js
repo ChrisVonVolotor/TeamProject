@@ -13,7 +13,9 @@ var Question = createReactClass({
             correct: false,
             showAnswer: false,
             score: 0,
-            attempts: 0
+            attempts: 0,
+            correctResponse: ["Nice one!", "Good job!", "Correct!", "Well done!", "You got it right!"],
+            wrongResponse: ["Unlucky, try again", "Not quite, have another go", "Nearly, have another shot"]
         }
     },
 
@@ -28,7 +30,7 @@ var Question = createReactClass({
             if (answers[i].answerPosition != "placeD"){
                 if(document.getElementById(answers[i].answerPosition).innerHTML != "\u2003"+answers[i].answerCodeSnippet+"\u2003"){
                     isCorrect = false;
-                    console.log("There was a mismatch with your answers");
+                    document.getElementById('wrongMessage').style.visibility = "visible";
                     this.setState({
                         attempts: this.state.attempts+1
                     })
@@ -42,6 +44,7 @@ var Question = createReactClass({
                 score: (this.state.score+10)-this.state.attempts
             })
         } else if(isCorrect){
+
             this.setState({
                 correct: true,
                 isAnswered: true,
@@ -81,25 +84,68 @@ var Question = createReactClass({
         const html = this.props.questionsList[this.props.index].levelCode
         return (
             <div>
-                <div>Number of attempts: {this.state.attempts}</div>
-                <div>Your score: {this.state.score}</div>
+                <h1>&nbsp;Question {this.props.index+1}</h1><br/>
+                <span>Fill the missing boxes with the correct answer from the left</span><br/><br/><br/>
+                <div className="attempts">Number of attempts: {this.state.attempts}</div>
+                <div className="score">Your score: {this.state.score}</div>
 
-                <div style={{align: "left"}}>
+                <div className="answers">
                     {this.props.questionsList[this.props.index].solution.map((item,i) => {
                         var idName = "drag";
-                        return <span className="dragItem" key={i} id={idName+(i+1)} draggable="true" onDragStart={this.drag}>{ReactHtmlParser(item.answerCodeSnippet)}</span>
+                        return <span key={i} >
+                            <span className="dragItem" id={idName+(i+1)} draggable="true" onDragStart={this.drag}>{ReactHtmlParser(item.answerCodeSnippet)}</span>
+                                <br/><br/>
+                        </span>
                     })
                     }
                 </div>
 
-                <br></br>
-                    {/*<Draggable><div>{this.props.questionsList[this.props.index].answer1}</div></Draggable><br></br>*/}
-                    {/*<Draggable><div>{this.props.questionsList[this.props.index].answer2}</div></Draggable><br></br>*/}
-                    {/*<Draggable><div>{this.props.questionsList[this.props.index].answer3}</div></Draggable><br></br>*/}
-                    {/*<Draggable><div>{this.props.questionsList[this.props.index].answer4}</div></Draggable><br></br>*/}
-                    {/*<div dangerouslySetInnerHTML={this.setQuestion()}></div>*/}
+                <div className="text">
+                    {this.props.questionsList[this.props.index].levelCode.question.map((item,i) => {
+                        var idName = "place";
+                        if (i < this.props.questionsList[this.props.index].levelCode.question.length - 1) {
+                            return <span key={i}>{ReactHtmlParser(item)}
+                                <span id={idName+(i+1)} className="place" onDrop={this.drop} onDragOver={this.allowDrop} style={{border: "solid"}}>&emsp;</span></span>
+                        } else {
+                            return <span key={i}>
+                            {ReactHtmlParser(item)}
+                        </span>
+                        }
+                    })
+                    }
+                </div>
 
-                <div style={{align: "center"}}>
+                <h1 id='wrongMessage' className='wrongMessage'>You're wrong</h1>
+
+
+                <br></br>
+                    <button type="button" onClick={this.isCorrect} className="btn btn-success">Submit</button>
+            </div>
+        )
+    },
+
+
+    renderCorrect: function(){
+        return (
+            <div>
+                <h1>&nbsp;Question {this.props.index+1}</h1><br/>
+                <span>Fill the missing boxes with the correct answer from the left</span><div className="bee"></div><br/><br/><br/>
+
+                <div className="attempts">Number of attempts: {this.state.attempts}</div>
+                <div className="score">Your score: {this.state.score}</div>
+
+                <div className="answers">
+                    {this.props.questionsList[this.props.index].solution.map((item,i) => {
+                        var idName = "drag";
+                        return <span key={i}>
+                            <span className="dragItem"  id={idName+(i+1)} draggable="true" onDragStart={this.drag}>{ReactHtmlParser(item.answerCodeSnippet)}</span>
+                                <br/><br/>
+                        </span>
+                    })
+                    }
+                </div>
+
+                <div className="text">
                     {this.props.questionsList[this.props.index].levelCode.question.map((item,i) => {
                         var idName = "place";
                         if (i < this.props.questionsList[this.props.index].levelCode.question.length - 1) {
@@ -115,42 +161,7 @@ var Question = createReactClass({
                 </div>
 
 
-
-
-                <br></br>
-                    <button type="button" onClick={this.isCorrect} className="btn btn-success">Submit</button>
-                    <button type="button" onClick={this.handleButtonClick} className="btn btn-success">Hint</button>
-                <Timer ref={this.child}/>
-            </div>
-        )
-    },
-
-
-    renderCorrect: function(){
-        return (
-            <div>
-                <div>Number of attempts: {this.state.attempts}</div>
-                <div>Your score: {this.state.score}</div>
-
-                {this.props.questionsList[this.props.index].solution.map((item,i) => {
-                    var idName = "drag";
-                    return <div key={i} id={idName+(i+1)} draggable="true" onDragStart={this.drag} className="drag">{ReactHtmlParser(item.answerCodeSnippet)}</div>
-                })
-                }
-                <br></br>
-                {this.props.questionsList[this.props.index].levelCode.question.map((item,i) => {
-                    var idName = "place";
-                    if (i < this.props.questionsList[this.props.index].levelCode.question.length - 1) {
-                        return <span key={i}>{ReactHtmlParser(item)}
-                            <span id={idName+(i+1)} className="place" onDrop={this.drop} onDragOver={this.allowDrop} style={{border: "solid"}}>&emsp;</span></span>
-                    } else {
-                        return <span key={i}>
-                            {ReactHtmlParser(item)}
-                        </span>
-                    }
-                })
-                }
-                <h1>You're correct!</h1>
+                <h1>{this.state.correctResponse[Math.floor(Math.random() * 5)]}</h1>
                 <br></br>
                 <button type="button" onClick={this.handleClick} className="btn btn-success">Next</button>
 

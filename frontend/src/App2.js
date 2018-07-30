@@ -146,8 +146,56 @@ var App = createReactClass({
         })
     },
 
+    postScore: function(){
+        var self = this;
+        $.ajax({
+            url: "http://localhost:8080/demo/add?firstname="+this.refs.firstName.value+"&surname="+this.refs.surName.value+"&accNumber="+this.refs.accNumber.value,
+            type: 'POST'
+        }).then(function (data) {
+            self.props.parentMethod("viewing");
+        });
+    },
+
+    getHighScores: function(){
+
+        $.ajax({
+            url: "http://localhost:8080/something/scores/json/",
+            dataType: 'json'
+        }).then(function (data) {
+            this.setState({
+                userScores: data
+            });
+        });
+    },
+
+    getFromAPI: function(difficulty){
+
+        var url = "";
+
+        if(difficulty == "Easy"){
+            url = "http://localhost:8080/something/questions/json/1";
+        } else if(difficulty == "Medium"){
+            url = "http://localhost:8080/something/questions/json/2";
+        } else if(difficulty == "Hard"){
+            url = "http://localhost:8080/something/questions/json/3";
+        }
+
+        $.ajax({
+            url: url,
+            dataType: 'json'
+        }).then(function (data) {
+            this.setState({
+                questionsList: data
+            });
+        });
+    },
+
+
     getQuestions: function(newState){
         if(newState == "Easy"){
+
+            this.getFromAPI(newState);
+
             this.setState({
                 //questionsList: [{"answer1": "dummy answer 1","answer2": "dummy answer 2", "answer3": "dummy answer 3", "answer4": "dummy answer 4", "correctOrder":"1234"}]
                 questionsList: [
@@ -157,13 +205,11 @@ var App = createReactClass({
                         "levelPosition": 1,
                         "levelNumber": "1A",
                         "levelName": "Hello World!",
-                        "lesson": "within java all commands should be ended with a certain character.\n this charcter is the semi-colon the ; key. \n the computer sees this key as a end line symbol.",
+                        "lesson": "Within java all statements should be ended with a semi-colon.\n This is the ; key. \n This tells java that this is the end of the our statement.",
                         "levelDescription": "Put a child friendly description of level here (Build Hello World)",
                         "levelCode": {
                             "question": [
-                                "public class Hello{<br>&emsp;public static void main() {<br>&emsp;&emsp;System.out.println(\"Hello World\")",
-                                "<br>&emsp;}<br>}",
-                                "", //this is the last line ensuring there is a div at the end of the previous line.
+                                "String colour = \"Red\"",
                                 ""
                             ]
                         },
@@ -172,19 +218,12 @@ var App = createReactClass({
                         "solution": [{
                             "answerPosition": "place1",
                             "answerCodeSnippet": ";",
-                            "id": 5
                         },{
                             "answerPosition": "placeD",
                             "answerCodeSnippet": ".",
-                            "id": 6
                         },{
-                            "answerPosition": "place2",
-                            "answerCodeSnippet": "hello",
-                            "id": 7
-                        },{
-                            "answerPosition": "place3",
-                            "answerCodeSnippet": "extra answer",
-                            "id": 8
+                            "answerPosition": "placeD",
+                            "answerCodeSnippet": ":",
                         }
                         ]
                     },
@@ -199,8 +238,7 @@ var App = createReactClass({
                             "question": [
                                 "public class Hello{<br>&emsp;public static void main() {<br>&emsp;&emsp;System.out.println(\"Hello World\")",
                                 "<br>&emsp;}<br>}",
-                                "", //this is the last line ensuring there is a div at the end of the previous line.
-                                ""
+                                "" //this is the last line ensuring there is a div at the end of the previous line.
                             ]
                         },
                         "timer": 600,
@@ -214,13 +252,9 @@ var App = createReactClass({
                             "answerCodeSnippet": ".",
                             "id": 6
                         },{
-                            "answerPosition": "place2",
+                            "answerPosition": "placeD",
                             "answerCodeSnippet": "hello",
                             "id": 7
-                        },{
-                            "answerPosition": "place3",
-                            "answerCodeSnippet": "extra answer",
-                            "id": 8
                         }
                         ]
                     }
@@ -288,7 +322,9 @@ var App = createReactClass({
             <div>
                 <NavBar parentMethod={this.handleState} />
                 <div className="container">
-                    <h1 className="leaf">About us</h1>
+                    <div className="leaf">
+                        <h1 className="header">About us</h1>
+                    </div>
                     <p>Our mission is (Insert generic motivational stuff here) "for the youth"</p>
                 </div>
                 <span className="footer"></span>
@@ -304,6 +340,7 @@ var App = createReactClass({
                 <div className="container">
                     <Lesson parentMethod={this.lessonFinish} index={this.state.index} lessonList={this.state.questionsList} difficulty={this.state.difficulty}/>
                 </div>
+                <span className="footer"></span>
 
             </div>
         )
@@ -316,6 +353,7 @@ var App = createReactClass({
                 <div className="container">
                     <Question parentMethod={this.next} index={this.state.index} questionsList={this.state.questionsList} difficulty={this.state.difficulty}/>
                 </div>
+                <span className="footer"></span>
 
             </div>
         )
@@ -328,11 +366,12 @@ var App = createReactClass({
                 <NavBar parentMethod={this.handleState}/>
                 <div className="container">
                     <form>
-                        <div id='first'> Hey there friend, what's your name? </div>
-                        <input id='text' className="text"/>
-                        <button id='datdearbutton' onClick={this.getUserName}>Yes that's my name.</button>
+                        <div id='first'> Before we start, could you write down your name? </div><br></br>
+                        <input className="textbox" id='text'/>
+                        <button className="btn btn-success"   id='datdearbutton' onClick={this.getUserName}>Submit</button>
                     </form>
                 </div>
+                <span className="footer"></span>
 
             </div>
         )
@@ -345,6 +384,7 @@ var App = createReactClass({
                     <HighScores userScores={this.state.userScores}/>
 
                 </div>
+                <span className="footer"></span>
 
             </div>
         )
@@ -361,6 +401,8 @@ var App = createReactClass({
                     <button type="button" onClick={this.sendPlayer} className="btn btn-success">Yes</button>
 
                 </div>
+                <span className="footer"></span>
+
             </div>
         )
     },

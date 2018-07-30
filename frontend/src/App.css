@@ -1,84 +1,12 @@
-.App {
-    text-align: center;
-}
 
-.App-logo {
-    animation: App-logo-spin infinite 20s linear;
-    height: 80px;
-}
-
-.App-header {
-    background-color: #222;
-    height: 150px;
-    padding: 20px;
-    color: white;
-}
-
-.App-title {
-    font-size: 1.5em;
-}
-
-.App-intro {
-    font-size: large;
-}
-
-@keyframes App-logo-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-/*Where all the text is contained*/
-.container{
-    alignment: center;
-    width: 80%;
-    height: 80%;
-    margin: auto;
-    padding: 10px;
-    box-shadow: 5px 10px darkseagreen;
-    border-radius: 100px 0px;
-    background-color: papayawhip;
-    border: 1px solid papayawhip;
-}
-
-/*The Body with a repeating image*/
-body {
-  width: 100%;
-  height: 100%;
-  background: url(cartoon-background-8430.jpeg);
-  background-repeat: repeat-x;
-  background-color: #60a800;
-  animation: backgroundScroll 400000s linear infinite;
-  background-size: 100%;
-}
-
-@-webkit-keyframes backgroundScroll {
-  from {background-position: 0 0;}
-  to {background-position: -15000000px 0;}
-}
-
-@keyframes backgroundScroll {
-  from {background-position: 0 0;}
-  to {background-position: -15000000px 0;}
-}
-/*The location you want to drop items in*/
-.place{
-    min-width: 40px;
-    border: 1px dashed #218838;
-}
 /*the drag and drop items*/
 .dragItem {
     padding: 5px;
     margin: 7px;
     text-align: center;
+    font-size: 30px;
     background-color: paleturquoise;
-    font-size: 12px;
     border: 1px dashed cornflowerblue;
-}
-
-/*title goes inside the leaf div*/
-.header{
-    margin: 10%;
-    padding-top: 20%;
 }
 
 /*leaf goes in div around the title*/
@@ -103,4 +31,210 @@ body {
     background-repeat: repeat-x;
     bottom: 0;
     position: absolute;
+}
+
+.answers{
+    position: relative;
+    top: 18%;
+    left: 1%;
+}
+
+.place{
+    min-width: 40px;
+    border: 1px dashed #218838;
+}
+
+.container{
+    alignment: center;
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    padding: 10px;
+    box-shadow: 5px 10px darkseagreen;
+    border-radius: 50px 0px;
+
+    background-color: papayawhip;
+    border: 1px solid papayawhip;
+}
+.text{
+    position: absolute;
+    font-size: 30px;
+    left: 30%;
+    top: 35%;
+    width: 45%;
+
+}
+#submit{
+    position: absolute;
+    left: 30%;
+    top: 80%;
+    width: 40%;
+    height: 10%;
+    font-size: 40px;
+    background-color: dodgerblue;
+}
+.selection{
+    float: left;
+    position:absolute;
+    left: 6%;
+    top: 10%;
+    width: 10%;
+    height: 80%;
+    margin: 10px;
+    padding: 10px;
+    border: 3px solid red;
+}
+
+.musicZone{
+    background-color: #28a745;
+    padding: 2px;
+    color: white;
+
+}
+
+
+@keyframes App-logo-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    background: url(cartoon-background-8430.jpeg);
+    background-repeat: repeat-x;
+    background-color: #60a800;
+    animation: backgroundScroll 400000s linear infinite;
+    background-size: 100%;
+}
+
+@-webkit-keyframes backgroundScroll {
+    from {background-position: 0 0;}
+    to {background-position: -15000000px 0;}
+}
+
+@keyframes backgroundScroll {
+    from {background-position: 0 0;}
+    to {background-position: -15000000px 0;}
+}
+
+
+
+.bee {
+    background-image: url("/bee.png");
+    animation: MoveUpDown 3s linear infinite;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: -3;
+}
+
+@keyframes MoveUpDown {
+    0%, 100% {
+        bottom: 0;
+    }
+    50% {
+        bottom: 100px;
+    }
+}
+
+.header{
+    margin: 10%;
+    padding-top: 20%;
+}
+
+
+.leaf {
+    margin: auto;
+    width: 80%;
+    margin-bottom: 2%;
+    width: 150px; height: 100px;
+    background-color: #A0DE21;
+    -moz-border-radius: 100px 0px;
+    -webkit-border-radius: 100px 0px;
+    border-radius: 100px 0px;
+}
+
+.footer{
+    margin: auto;
+    background-image: url("shrub.png");
+    width: 100%;
+    height: 50%;
+    float: bottom;
+    animation: backgroundScroll2 400000s linear infinite;
+    background-repeat: repeat-x;
+    bottom: 0;
+    position: absolute;
+    z-index: -3;
+}
+
+.footerText{
+    alignment: center;
+    width: 80%;
+    height: 45%;
+    margin: auto;
+    padding: 10px;
+    box-shadow: 5px 10px darkseagreen;
+    border-radius: 0px 50px;
+
+    background-color: papayawhip;
+    border: 1px solid papayawhip;
+}
+
+@-webkit-keyframes backgroundScroll2 {
+    from {background-position: 0 0;}
+    to {background-position: -30000000px 0;}
+}
+
+@keyframes backgroundScroll2 {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: -30000000px 0;
+    }
+}
+
+h1{
+    font-size: x-large;
+}
+
+h2{
+    font-size: larger;
+}
+
+h3{
+    font-size: large;
+}
+
+p{
+    font-size: medium;
+}
+
+pre{
+    font-size: small;
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.textbox{
+    font-size: 22px;
+}
+
+.attempts{
+    position: absolute;
+    top: 13%;
+    left: 45%
+}
+
+.score{
+    position: absolute;
+    top: 13%;
+    left: 80%
+}
+
+.wrongMessage{
+    visibility: hidden;
 }
