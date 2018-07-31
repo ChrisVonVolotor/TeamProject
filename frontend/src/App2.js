@@ -5,6 +5,7 @@ import NavBar from './NavBar2.js';
 import Lesson from './Lesson.js';
 import Question from './Question.js';
 import HighScores from './HighScores.js';
+import bee from './bee.png';
 
 var createReactClass = require('create-react-class');
 var App = createReactClass({
@@ -24,7 +25,8 @@ var App = createReactClass({
             index: 0,
             score: 0,
             userScores: [],
-            currUser: ""
+            currUser: "",
+            email: ""
         }
     },
 
@@ -128,22 +130,34 @@ var App = createReactClass({
         }
     },
 
-    sendPlayer: function(){
-        var dataToBeSent = {
-            "userName": this.state.currUser,
-            "score": this.state.score
-        }
-        this.state.userScores.push(dataToBeSent);
-        // var Player= {"\"playerName\"":this.state.currUser, "\"score\"":this.state.score};
-        // // var JsonPlayer = JSON.parse(Player);
-        // console.log(Player);
+    updateEmail: function(){
         this.setState({
-            getUserDetails: false,
-            showHighScores: true,
-            showLesson: false,
-            showQuestion: false,
-            addHighScore: false
+            email: document.getElementById("email").value
         })
+    },
+
+    sendPlayer: function(){
+
+        if(this.state.email!="" && !this.state.email.match("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$")){
+            document.getElementById("emailMessage").style.visibility = "visible";
+        }else{
+            var dataToBeSent = {
+                "userName": this.state.currUser,
+                "score": this.state.score
+            }
+            this.state.userScores.push(dataToBeSent);
+            // var Player= {"\"playerName\"":this.state.currUser, "\"score\"":this.state.score};
+            // // var JsonPlayer = JSON.parse(Player);
+            // console.log(Player);
+            this.setState({
+                getUserDetails: false,
+                showHighScores: true,
+                showLesson: false,
+                showQuestion: false,
+                addHighScore: false
+            })
+        }
+
     },
 
     postScore: function(){
@@ -233,12 +247,13 @@ var App = createReactClass({
                         "levelPosition": 1,
                         "levelNumber": "1A",
                         "levelName": "Hello World!",
+                        "lesson": "something something",
                         "levelDescription": "Put a child friendly description of level here (Build Hello World)",
                         "levelCode": {
                             "question": [
                                 "public class Hello{<br>&emsp;public static void main() {<br>&emsp;&emsp;System.out.println(\"Hello World\")",
                                 "<br>&emsp;}<br>}",
-                                "" //this is the last line ensuring there is a div at the end of the previous line.
+
                             ]
                         },
                         "timer": 600,
@@ -320,13 +335,15 @@ var App = createReactClass({
     renderAboutUs: function(){
         return (
             <div>
+
                 <NavBar parentMethod={this.handleState} />
-                <div className="container">
+                <div className="footerText">
                     <div className="leaf">
                         <h1 className="header">About us</h1>
                     </div>
                     <p>Our mission is (Insert generic motivational stuff here) "for the youth"</p>
                 </div>
+                <img className="bee" src={bee} alt="Logo" />
                 <span className="footer"></span>
 
             </div>
@@ -340,6 +357,7 @@ var App = createReactClass({
                 <div className="container">
                     <Lesson parentMethod={this.lessonFinish} index={this.state.index} lessonList={this.state.questionsList} difficulty={this.state.difficulty}/>
                 </div>
+                <img className="bee" src={bee} alt="Logo" />
                 <span className="footer"></span>
 
             </div>
@@ -353,6 +371,8 @@ var App = createReactClass({
                 <div className="container">
                     <Question parentMethod={this.next} index={this.state.index} questionsList={this.state.questionsList} difficulty={this.state.difficulty}/>
                 </div>
+                <img className="bee" src={bee} alt="Logo" />
+
                 <span className="footer"></span>
 
             </div>
@@ -365,12 +385,18 @@ var App = createReactClass({
             <div>
                 <NavBar parentMethod={this.handleState}/>
                 <div className="container">
+                    <div>
+                        <h1>&nbsp;Guide</h1><br/>
+                        <p>Hey there, you're about to get started with our exercises that are designed to teach you the basic principles of coding in small easy steps. Before each question there will be a lesson which you should pay close attention to as it may just help you in answering the question.<br/><br/> Each question is worth 10 points but for every attempt you get wrong you'll lose a point. Don't worry, the lowest you can get is 1 point for each question so there is always a point to play for. Good luck and just maybe we'll see your name on our highscores.</p>
+                    </div>
                     <form>
-                        <div id='first'> Before we start, could you write down your name? </div><br></br>
-                        <input className="textbox" id='text'/>
-                        <button className="btn btn-success"   id='datdearbutton' onClick={this.getUserName}>Submit</button>
+                        <div id='first'>&nbsp; Before we start, could you tell me your name? </div><br></br>
+                            <input className="textbox inline" id='text'/>
+                                <button className="btn btn-success"   id='datdearbutton' onClick={this.getUserName}>Submit</button>
                     </form>
                 </div>
+                <img className="bee" src={bee} alt="Logo" />
+
                 <span className="footer"></span>
 
             </div>
@@ -384,6 +410,8 @@ var App = createReactClass({
                     <HighScores userScores={this.state.userScores}/>
 
                 </div>
+                <img className="bee" src={bee} alt="Logo" />
+
                 <span className="footer"></span>
 
             </div>
@@ -395,12 +423,17 @@ var App = createReactClass({
             <div>
                 <NavBar parentMethod={this.handleState}/>
                 <div className="container">
-                    <h3>Congratulations {this.state.currUser}. Your total score was {this.state.score} </h3>
-                    <h4> Would you like to submit your score?</h4>
-                    <button type="button" onClick={this.goToAbout} className="btn btn-warning">No</button>
-                    <button type="button" onClick={this.sendPlayer} className="btn btn-success">Yes</button>
+                    <h1>&nbsp;Congratulations {this.state.currUser}. Your total score was {this.state.score} </h1><br/><br/>
+                    <span> Would you like to submit your score? Optionally, type in an email address if you would like to receive an email with your score</span><br/><br/>
+                        Email: <input type="email" onChange={this.updateEmail} id="email" className="textbox inline" />&nbsp;<span id="emailMessage" className="emailMessage alert alert-danger">Email address is not valid</span>
 
+                    <br/><br/>
+                    <button type="button" onClick={this.goToAbout} className="btn btn-success">No</button>
+                    <button type="button" onClick={this.sendPlayer} className="btn btn-success">Yes</button>
                 </div>
+
+                <img className="bee" src={bee} alt="Logo" />
+
                 <span className="footer"></span>
 
             </div>

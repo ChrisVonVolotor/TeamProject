@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { stack as Menu } from 'react-burger-menu'
 
     var createReactClass = require('create-react-class');
     var NavBar = createReactClass({
@@ -27,9 +28,9 @@ import React, { Component } from 'react';
             return (
 
 
-            <nav className="navbar navbar-default">
+            <nav className="navbar-default">
                    <a className="navbar-brand" href="#">Children Of The Future</a>
-                 <ul className="nav navbar-nav">
+                 <ul className="navbar-nav">
                    <li onClick={this.handleClick1}><a href="#">About us</a></li>
                    <li className="dropdown"><a className="dropdown-toggle" data-toggle="dropdown" href="#">Start Playing</a>
                      <ul className="dropdown-menu">

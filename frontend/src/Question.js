@@ -85,9 +85,9 @@ var Question = createReactClass({
         return (
             <div>
                 <h1>&nbsp;Question {this.props.index+1}</h1><br/>
-                <span>Fill the missing boxes with the correct answer from the left</span><br/><br/><br/>
-                <div className="attempts">Number of attempts: {this.state.attempts}</div>
-                <div className="score">Your score: {this.state.score}</div>
+                <span>Drag the correct answer into the missing boxes</span>
+                <div className="tracker">Attempts: {this.state.attempts}</div>
+                <div className="tracker">Your score: {this.state.score}</div>
 
                 <div className="answers">
                     {this.props.questionsList[this.props.index].solution.map((item,i) => {
@@ -115,11 +115,12 @@ var Question = createReactClass({
                     }
                 </div>
 
-                <h1 id='wrongMessage' className='wrongMessage'>You're wrong</h1>
 
 
                 <br></br>
-                    <button type="button" onClick={this.isCorrect} className="btn btn-success">Submit</button>
+                    <button type="button" onClick={this.isCorrect} className="btn btn-success submitButton">Submit</button>
+                <span id='wrongMessage' className='wrongMessage alert alert-warning'>{this.state.wrongResponse[Math.floor(Math.random() * 3)]}</span>
+
             </div>
         )
     },
@@ -129,16 +130,15 @@ var Question = createReactClass({
         return (
             <div>
                 <h1>&nbsp;Question {this.props.index+1}</h1><br/>
-                <span>Fill the missing boxes with the correct answer from the left</span><div className="bee"></div><br/><br/><br/>
-
-                <div className="attempts">Number of attempts: {this.state.attempts}</div>
-                <div className="score">Your score: {this.state.score}</div>
+                <span>Drag the correct answer into the missing boxes</span>
+                <div className="tracker">Attempts: {this.state.attempts}</div>
+                <div className="tracker">Your score: {this.state.score}</div>
 
                 <div className="answers">
                     {this.props.questionsList[this.props.index].solution.map((item,i) => {
                         var idName = "drag";
-                        return <span key={i}>
-                            <span className="dragItem"  id={idName+(i+1)} draggable="true" onDragStart={this.drag}>{ReactHtmlParser(item.answerCodeSnippet)}</span>
+                        return <span key={i} >
+                            <span className="dragItem" id={idName+(i+1)} draggable="true" onDragStart={this.drag}>{ReactHtmlParser(item.answerCodeSnippet)}</span>
                                 <br/><br/>
                         </span>
                     })
@@ -160,10 +160,9 @@ var Question = createReactClass({
                     }
                 </div>
 
-
-                <h1>{this.state.correctResponse[Math.floor(Math.random() * 5)]}</h1>
                 <br></br>
-                <button type="button" onClick={this.handleClick} className="btn btn-success">Next</button>
+                <button type="button" onClick={this.handleClick} className="btn btn-success submitButton">Next</button>
+                <span className='correctMessage alert alert-success'>{this.state.correctResponse[Math.floor(Math.random() * 5)]}</span>
 
             </div>
         )
