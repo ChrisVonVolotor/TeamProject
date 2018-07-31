@@ -119,6 +119,8 @@ var Question = createReactClass({
 
                 <br></br>
                     <button type="button" onClick={this.isCorrect} className="btn btn-success submitButton">Submit</button>
+                <button type="button" onClick={this.handleClick} className="btn btn-success submitButton">Skip</button>
+
                 <span id='wrongMessage' className='wrongMessage alert alert-warning'>{this.state.wrongResponse[Math.floor(Math.random() * 3)]}</span>
 
             </div>

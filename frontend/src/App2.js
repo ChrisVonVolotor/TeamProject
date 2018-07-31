@@ -32,9 +32,7 @@ var App = createReactClass({
 
     handleState: function(newState){
 
-        this.getLessons(newState);
         this.getQuestions(newState);
-        this.getAnswers(newState);
 
         if(newState == "AboutUs"){
             this.setState({
@@ -114,22 +112,6 @@ var App = createReactClass({
 
     },
 
-    getLessons: function(newState){
-        if(newState == "Easy"){
-            this.setState({
-                lessonList: ["Easy Lesson 1", "Easy Lesson 2"]
-            });
-        } else if(newState == "Medium"){
-            this.setState({
-                lessonList: ["Medium Lesson 1", "Medium Lesson 2"]
-            })
-        } else if(newState == "Hard") {
-            this.setState({
-                lessonList: ["Hard Lesson 1", "Hard Lesson 2"]
-            })
-        }
-    },
-
     updateEmail: function(){
         this.setState({
             email: document.getElementById("email").value
@@ -182,30 +164,31 @@ var App = createReactClass({
         });
     },
 
-    getFromAPI: function(difficulty){
+    getQuestions: function(difficulty){
 
+        var self = this;
         var url = "";
 
         if(difficulty == "Easy"){
-            url = "http://localhost:8080/something/questions/json/1";
+            url = "http://localhost:8082/questions/difficulty/1";
         } else if(difficulty == "Medium"){
-            url = "http://localhost:8080/something/questions/json/2";
+            url = "http://localhost:8082/questions/difficulty/2";
         } else if(difficulty == "Hard"){
-            url = "http://localhost:8080/something/questions/json/3";
+            url = "http://localhost:8082/questions/difficulty/3";
         }
-
         $.ajax({
             url: url,
             dataType: 'json'
         }).then(function (data) {
-            this.setState({
+            console.log(data);
+            self.setState({
                 questionsList: data
             });
         });
     },
 
 
-    getQuestions: function(newState){
+    getQuestionsOld: function(newState){
         if(newState == "Easy"){
 
             this.getFromAPI(newState);
@@ -288,22 +271,6 @@ var App = createReactClass({
     },
 
 
-    getAnswers: function(newState){
-        if(newState == "Easy"){
-            this.setState({
-                answersList: ["Easy Answer 1"]
-            });
-        } else if(newState == "Medium"){
-            this.setState({
-                answersList: ["Medium Answer 1"]
-            })
-        } else if(newState == "Hard") {
-            this.setState({
-                answersList: ["Hard Answer 1"]
-            })
-        }
-    },
-
     getUserName: function(){
         document.getElementById('text').style.visibility='hidden';
         document.getElementById('first').innerHTML='HUH ' + document.getElementById('text').value +'? that\'s a nice name';
@@ -351,6 +318,7 @@ var App = createReactClass({
     },
 
     renderLesson: function(){
+        console.log(this.state.questionsList[0].lesson);
         return (
             <div>
                 <NavBar parentMethod={this.handleState}/>
@@ -418,12 +386,27 @@ var App = createReactClass({
         )
     },
 
+    finalScoreMessage: function(){
+        if(this.state.score == this.state.questionsList.length * 10){
+            return <h1> Wow {this.state.currUser}, a perfect score. Your total score was {this.state.score} </h1>
+        } else if(this.state.score > this.state.questionsList.length * 8){
+            return <h1> You did great {this.state.currUser}. Your total score was {this.state.score} </h1>
+        } else if(this.state.score > this.state.questionsList.length * 6){
+            return <h1> Well done {this.state.currUser}. Your total score was {this.state.score} </h1>
+        } else if(this.state.score > this.state.questionsList.length * 4){
+            return <h1> Nice attempt {this.state.currUser}. Your total score was {this.state.score} </h1>
+        } else if(this.state.score >= 0){
+            return <h1> Unlucky {this.state.currUser}, maybe try reading the lessons more carefully. Your total score was {this.state.score} </h1>
+        }
+    },
+
     renderAskToAdd: function(){
         return(
             <div>
                 <NavBar parentMethod={this.handleState}/>
                 <div className="container">
-                    <h1>&nbsp;Congratulations {this.state.currUser}. Your total score was {this.state.score} </h1><br/><br/>
+                    {this.finalScoreMessage()}
+                    <br/><br/>
                     <span> Would you like to submit your score? Optionally, type in an email address if you would like to receive an email with your score</span><br/><br/>
                         Email: <input type="email" onChange={this.updateEmail} id="email" className="textbox inline" />&nbsp;<span id="emailMessage" className="emailMessage alert alert-danger">Email address is not valid</span>
 
